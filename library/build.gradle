@@ -38,5 +38,5 @@ android {
 }
 
 dependencies {
-    compile "com.android.support:support-v4:25.+"
+    provided "com.android.support:support-v4:25.+"
 }

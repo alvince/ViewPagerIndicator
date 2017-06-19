@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
  * {@link android.widget.FrameLayout} so it can receive the margin.
  */
 class IcsLinearLayout extends LinearLayout {
-    private static final int[] LL = new int[] {
+    private static final int[] LL = new int[]{
         /* 0 */ android.R.attr.divider,
         /* 1 */ android.R.attr.showDividers,
         /* 2 */ android.R.attr.dividerPadding,
@@ -29,7 +29,6 @@ class IcsLinearLayout extends LinearLayout {
     private int mDividerHeight;
     private int mShowDividers;
     private int mDividerPadding;
-
 
     public IcsLinearLayout(Context context, int themeAttr) {
         super(context);
@@ -113,7 +112,7 @@ class IcsLinearLayout extends LinearLayout {
 
         if (hasDividerBeforeChildAt(count)) {
             final View child = getChildAt(count - 1);
-            int bottom = 0;
+            int bottom;
             if (child == null) {
                 bottom = getHeight() - getPaddingBottom() - mDividerHeight;
             } else {
@@ -140,7 +139,7 @@ class IcsLinearLayout extends LinearLayout {
 
         if (hasDividerBeforeChildAt(count)) {
             final View child = getChildAt(count - 1);
-            int right = 0;
+            int right;
             if (child == null) {
                 right = getWidth() - getPaddingRight() - mDividerWidth;
             } else {
@@ -165,7 +164,7 @@ class IcsLinearLayout extends LinearLayout {
 
     private boolean hasDividerBeforeChildAt(int childIndex) {
         if (childIndex == 0 || childIndex == getChildCount()) {
-          return false;
+            return false;
         }
         if ((mShowDividers & SHOW_DIVIDER_MIDDLE) != 0) {
             boolean hasVisibleViewBefore = false;
