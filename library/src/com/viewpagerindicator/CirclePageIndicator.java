@@ -50,7 +50,6 @@ public class CirclePageIndicator extends View implements PageIndicator {
     private final Paint mPaintStroke = new Paint(ANTI_ALIAS_FLAG);
     private final Paint mPaintFill = new Paint(ANTI_ALIAS_FLAG);
     private ViewPager mViewPager;
-    private ViewPager.OnPageChangeListener mListener;
     private int mCurrentPage;
     private int mSnapPage;
     private float mPageOffset;
@@ -353,9 +352,9 @@ public class CirclePageIndicator extends View implements PageIndicator {
                 final int pointerId = ev.getPointerId(pointerIndex);
                 if (pointerId == mActivePointerId) {
                     final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
-                    mActivePointerId = MotionEventCompat.getPointerId(ev, newPointerIndex);
+                    mActivePointerId = ev.getPointerId(newPointerIndex);
                 }
-                mLastMotionX = MotionEventCompat.getX(ev, MotionEventCompat.findPointerIndex(ev, mActivePointerId));
+                mLastMotionX = ev.getX(ev.findPointerIndex(mActivePointerId));
                 break;
         }
 
@@ -368,13 +367,13 @@ public class CirclePageIndicator extends View implements PageIndicator {
             return;
         }
         if (mViewPager != null) {
-            mViewPager.setOnPageChangeListener(null);
+            mViewPager.removeOnPageChangeListener(this);
         }
         if (view.getAdapter() == null) {
             throw new IllegalStateException("ViewPager does not have adapter instance.");
         }
         mViewPager = view;
-        mViewPager.setOnPageChangeListener(this);
+        mViewPager.addOnPageChangeListener(this);
         invalidate();
     }
 
@@ -402,10 +401,6 @@ public class CirclePageIndicator extends View implements PageIndicator {
     @Override
     public void onPageScrollStateChanged(int state) {
         mScrollState = state;
-
-        if (mListener != null) {
-            mListener.onPageScrollStateChanged(state);
-        }
     }
 
     @Override
@@ -413,10 +408,6 @@ public class CirclePageIndicator extends View implements PageIndicator {
         mCurrentPage = position;
         mPageOffset = positionOffset;
         invalidate();
-
-        if (mListener != null) {
-            mListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
-        }
     }
 
     @Override
@@ -426,15 +417,11 @@ public class CirclePageIndicator extends View implements PageIndicator {
             mSnapPage = position;
             invalidate();
         }
-
-        if (mListener != null) {
-            mListener.onPageSelected(position);
-        }
     }
 
     @Override
     public void setOnPageChangeListener(ViewPager.OnPageChangeListener listener) {
-        mListener = listener;
+        if (mViewPager != null) mViewPager.addOnPageChangeListener(listener);
     }
 
     /*

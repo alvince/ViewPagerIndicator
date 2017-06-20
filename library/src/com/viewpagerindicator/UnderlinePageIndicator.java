@@ -48,7 +48,6 @@ public class UnderlinePageIndicator extends View implements PageIndicator {
     private int mFadeBy;
 
     private ViewPager mViewPager;
-    private ViewPager.OnPageChangeListener mListener;
     private int mScrollState;
     private int mCurrentPage;
     private float mPositionOffset;
@@ -270,13 +269,13 @@ public class UnderlinePageIndicator extends View implements PageIndicator {
         }
         if (mViewPager != null) {
             //Clear us from the old pager.
-            mViewPager.setOnPageChangeListener(null);
+            mViewPager.removeOnPageChangeListener(this);
         }
         if (viewPager.getAdapter() == null) {
             throw new IllegalStateException("ViewPager does not have adapter instance.");
         }
         mViewPager = viewPager;
-        mViewPager.setOnPageChangeListener(this);
+        mViewPager.addOnPageChangeListener(this);
         invalidate();
         post(new Runnable() {
             @Override
@@ -312,10 +311,6 @@ public class UnderlinePageIndicator extends View implements PageIndicator {
     @Override
     public void onPageScrollStateChanged(int state) {
         mScrollState = state;
-
-        if (mListener != null) {
-            mListener.onPageScrollStateChanged(state);
-        }
     }
 
     @Override
@@ -331,10 +326,6 @@ public class UnderlinePageIndicator extends View implements PageIndicator {
             }
         }
         invalidate();
-
-        if (mListener != null) {
-            mListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
-        }
     }
 
     @Override
@@ -345,14 +336,11 @@ public class UnderlinePageIndicator extends View implements PageIndicator {
             invalidate();
             mFadeRunnable.run();
         }
-        if (mListener != null) {
-            mListener.onPageSelected(position);
-        }
     }
 
     @Override
     public void setOnPageChangeListener(ViewPager.OnPageChangeListener listener) {
-        mListener = listener;
+        if (mViewPager != null) mViewPager.addOnPageChangeListener(listener);
     }
 
     @Override

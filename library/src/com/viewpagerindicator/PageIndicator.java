@@ -41,7 +41,7 @@ public interface PageIndicator extends ViewPager.OnPageChangeListener {
 
     /**
      * <p>Set the current page of both the ViewPager and indicator.</p>
-     *
+     * <p/>
      * <p>This <strong>must</strong> be used if you need to set the page before
      * the views are drawn on screen (e.g., default start page).</p>
      *
@@ -53,7 +53,9 @@ public interface PageIndicator extends ViewPager.OnPageChangeListener {
      * Set a page change listener which will receive forwarded events.
      *
      * @param listener
+     * @deprecated use {@link ViewPager#addOnPageChangeListener(ViewPager.OnPageChangeListener)} instead
      */
+    @Deprecated
     void setOnPageChangeListener(ViewPager.OnPageChangeListener listener);
 
     /**

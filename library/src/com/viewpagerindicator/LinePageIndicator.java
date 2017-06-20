@@ -42,7 +42,6 @@ public class LinePageIndicator extends View implements PageIndicator {
     private final Paint mPaintUnselected = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint mPaintSelected = new Paint(Paint.ANTI_ALIAS_FLAG);
     private ViewPager mViewPager;
-    private ViewPager.OnPageChangeListener mListener;
     private int mCurrentPage;
     private boolean mCentered;
     private float mLineWidth;
@@ -280,13 +279,13 @@ public class LinePageIndicator extends View implements PageIndicator {
         }
         if (mViewPager != null) {
             //Clear us from the old pager.
-            mViewPager.setOnPageChangeListener(null);
+            mViewPager.removeOnPageChangeListener(this);
         }
         if (viewPager.getAdapter() == null) {
             throw new IllegalStateException("ViewPager does not have adapter instance.");
         }
         mViewPager = viewPager;
-        mViewPager.setOnPageChangeListener(this);
+        mViewPager.addOnPageChangeListener(this);
         invalidate();
     }
 
@@ -313,31 +312,21 @@ public class LinePageIndicator extends View implements PageIndicator {
 
     @Override
     public void onPageScrollStateChanged(int state) {
-        if (mListener != null) {
-            mListener.onPageScrollStateChanged(state);
-        }
     }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        if (mListener != null) {
-            mListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
-        }
     }
 
     @Override
     public void onPageSelected(int position) {
         mCurrentPage = position;
         invalidate();
-
-        if (mListener != null) {
-            mListener.onPageSelected(position);
-        }
     }
 
     @Override
     public void setOnPageChangeListener(ViewPager.OnPageChangeListener listener) {
-        mListener = listener;
+        if (mViewPager != null) mViewPager.addOnPageChangeListener(listener);
     }
 
     @Override
