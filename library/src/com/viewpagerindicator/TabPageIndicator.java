@@ -69,6 +69,7 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
     private final IcsLinearLayout mTabLayout;
 
     private ViewPager mViewPager;
+    private ViewPager.OnPageChangeListener mListener;
 
     private int mMaxTabWidth;
     private int mSelectedTabIndex;
@@ -184,6 +185,9 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
         }
         if (mViewPager != null) {
             mViewPager.removeOnPageChangeListener(this);
+            if (mListener != null) {
+                mViewPager.removeOnPageChangeListener(mListener);
+            }
         }
         final PagerAdapter adapter = view.getAdapter();
         if (adapter == null) {
@@ -191,6 +195,9 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
         }
         mViewPager = view;
         view.addOnPageChangeListener(this);
+        if (mListener != null) {
+            view.addOnPageChangeListener(mListener);
+        }
         notifyDataSetChanged();
     }
 
@@ -247,6 +254,7 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
 
     @Override
     public void setOnPageChangeListener(OnPageChangeListener listener) {
+        mListener = listener;
         if (mViewPager != null) mViewPager.addOnPageChangeListener(listener);
     }
 

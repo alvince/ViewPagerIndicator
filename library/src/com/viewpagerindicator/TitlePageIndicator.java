@@ -116,6 +116,7 @@ public class TitlePageIndicator extends View implements PageIndicator {
     }
 
     private ViewPager mViewPager;
+    private ViewPager.OnPageChangeListener mListener;
     private int mCurrentPage = -1;
     private float mPageOffset;
     private int mScrollState;
@@ -702,12 +703,18 @@ public class TitlePageIndicator extends View implements PageIndicator {
         }
         if (mViewPager != null) {
             mViewPager.removeOnPageChangeListener(this);
+            if (mListener != null) {
+                mViewPager.removeOnPageChangeListener(mListener);
+            }
         }
         if (view.getAdapter() == null) {
             throw new IllegalStateException("ViewPager does not have adapter instance.");
         }
         mViewPager = view;
         mViewPager.addOnPageChangeListener(this);
+        if (mListener != null) {
+            mViewPager.addOnPageChangeListener(mListener);
+        }
         invalidate();
     }
 
@@ -763,6 +770,7 @@ public class TitlePageIndicator extends View implements PageIndicator {
 
     @Override
     public void setOnPageChangeListener(ViewPager.OnPageChangeListener listener) {
+        mListener = listener;
         if (mViewPager != null) mViewPager.addOnPageChangeListener(listener);
     }
 

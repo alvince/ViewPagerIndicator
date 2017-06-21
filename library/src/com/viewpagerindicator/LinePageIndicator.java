@@ -42,6 +42,7 @@ public class LinePageIndicator extends View implements PageIndicator {
     private final Paint mPaintUnselected = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint mPaintSelected = new Paint(Paint.ANTI_ALIAS_FLAG);
     private ViewPager mViewPager;
+    private ViewPager.OnPageChangeListener mListener;
     private int mCurrentPage;
     private boolean mCentered;
     private float mLineWidth;
@@ -280,12 +281,18 @@ public class LinePageIndicator extends View implements PageIndicator {
         if (mViewPager != null) {
             //Clear us from the old pager.
             mViewPager.removeOnPageChangeListener(this);
+            if (mListener != null) {
+                mViewPager.removeOnPageChangeListener(mListener);
+            }
         }
         if (viewPager.getAdapter() == null) {
             throw new IllegalStateException("ViewPager does not have adapter instance.");
         }
         mViewPager = viewPager;
         mViewPager.addOnPageChangeListener(this);
+        if (mListener != null) {
+            mViewPager.addOnPageChangeListener(mListener);
+        }
         invalidate();
     }
 
@@ -326,6 +333,7 @@ public class LinePageIndicator extends View implements PageIndicator {
 
     @Override
     public void setOnPageChangeListener(ViewPager.OnPageChangeListener listener) {
+        mListener = listener;
         if (mViewPager != null) mViewPager.addOnPageChangeListener(listener);
     }
 

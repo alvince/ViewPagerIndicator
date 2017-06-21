@@ -37,6 +37,7 @@ public class IconPageIndicator extends HorizontalScrollView implements PageIndic
     private final IcsLinearLayout mIconsLayout;
 
     private ViewPager mViewPager;
+    private OnPageChangeListener mListener;
     private Runnable mIconSelector;
     private int mSelectedIndex;
 
@@ -104,6 +105,9 @@ public class IconPageIndicator extends HorizontalScrollView implements PageIndic
         }
         if (mViewPager != null) {
             mViewPager.removeOnPageChangeListener(this);
+            if (mListener != null) {
+                mViewPager.removeOnPageChangeListener(mListener);
+            }
         }
         PagerAdapter adapter = view.getAdapter();
         if (adapter == null) {
@@ -111,6 +115,9 @@ public class IconPageIndicator extends HorizontalScrollView implements PageIndic
         }
         mViewPager = view;
         view.addOnPageChangeListener(this);
+        if (mListener != null) {
+            view.addOnPageChangeListener(mListener);
+        }
         notifyDataSetChanged();
     }
 
@@ -157,6 +164,7 @@ public class IconPageIndicator extends HorizontalScrollView implements PageIndic
 
     @Override
     public void setOnPageChangeListener(OnPageChangeListener listener) {
+        mListener = listener;
         if (mViewPager != null) mViewPager.addOnPageChangeListener(listener);
     }
 }

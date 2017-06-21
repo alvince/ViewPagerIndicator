@@ -50,6 +50,7 @@ public class CirclePageIndicator extends View implements PageIndicator {
     private final Paint mPaintStroke = new Paint(ANTI_ALIAS_FLAG);
     private final Paint mPaintFill = new Paint(ANTI_ALIAS_FLAG);
     private ViewPager mViewPager;
+    private ViewPager.OnPageChangeListener mListener;
     private int mCurrentPage;
     private int mSnapPage;
     private float mPageOffset;
@@ -368,12 +369,18 @@ public class CirclePageIndicator extends View implements PageIndicator {
         }
         if (mViewPager != null) {
             mViewPager.removeOnPageChangeListener(this);
+            if (mListener != null) {
+                mViewPager.removeOnPageChangeListener(mListener);
+            }
         }
         if (view.getAdapter() == null) {
             throw new IllegalStateException("ViewPager does not have adapter instance.");
         }
         mViewPager = view;
         mViewPager.addOnPageChangeListener(this);
+        if (mListener != null) {
+            mViewPager.addOnPageChangeListener(mListener);
+        }
         invalidate();
     }
 
@@ -421,6 +428,7 @@ public class CirclePageIndicator extends View implements PageIndicator {
 
     @Override
     public void setOnPageChangeListener(ViewPager.OnPageChangeListener listener) {
+        mListener = listener;
         if (mViewPager != null) mViewPager.addOnPageChangeListener(listener);
     }
 
